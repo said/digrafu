@@ -77,7 +77,92 @@
 		
 		$parameters .= "I\n2\n";
 		
-		if(defined $weight && $weight ne "n") {
+		if(defined $weight && $weight =~ /^[0-9]+(,[0-9]+)*$/) {
+			$parameters .= "W\n";
+			$parameters .= "Y\n";
+			
+			if($gamma > 0){
+				$parameters .= "$alpha\n";
+				if($gamma > 1){
+					$parameters .= "$fraction\n";
+				}
+			}
+			print "blz";
+			$parameters .= "$tempDir/weights\n";
+
+			my @sites = split /,/,$weight;
+			my @weights;
+			for my $i(0..$letters-1) {
+				$weights[$i] = 0;
+			}
+			for my $i(0..$#sites) {
+				$weights[$sites[$i] - 1] = 1;
+			}
+			
+			open WEIGHTS, ">$tempDir/weights";
+			print WEIGHTS join "",@weights;
+			close WEIGHTS;
+		}
+		else{
+			$parameters .= "Y\n";
+			
+			if($gamma > 0){
+				$parameters .= "$alpha\n";
+				if($gamma > 1){
+					$parameters .= "$fraction\n";
+				}
+			}
+		}
+		print $parameters;
+		exit;
+		open MATRIZDNA, ">".$tempDir."/parameters"
+			  or die "ERROR: Unable open file: $tempDir/parameters.\n$!\n";
+		print MATRIZDNA $parameters;
+		close MATRIZDNA;
+		
+		
+		(system("$pwd/Exe/dnadist < $tempDir/parameters > $tempDir/dnadistlog") == 0
+			and move("outfile","$tempDir/matrix"))
+			or &$_dying;
+	};
+	
+	my $_executeProtDist = sub {
+        my $instance = $_[1];
+        
+        my $pwd = $instance->parameter("PWD");
+	    my $model = $instance->parameter("MODEL");
+	    my $tempDir = $instance->parameter("TEMP");
+	    my $fileIn = $instance->parameter("INPUT");
+	    my $gamma = $instance->parameter("GAMMA");
+	    my $weight = $instance->parameter("WEIGHT");
+            my $letters = $instance->parameter("LETTER");
+	    my $alpha = $instance->parameter("ALPHA");
+	    my $fraction = $instance->parameter("ISITE");
+	    my $parameters = $fileIn."\n";
+        
+	    my $modelValue = 0;
+		if($model =~ /^pm/) {
+			$modelValue = 1;
+		}
+		elsif($model =~ /^pa/) {
+			$modelValue = 2;
+		}
+		elsif($model =~ /^k/) {
+			$modelValue = 3;
+		}
+		for my $i (1..$modelValue) {
+			$parameters .= "P\n";
+		}
+		
+		if($modelValue != 3) {
+			for my $i(1..$gamma){
+				$parameters .= "G\n";
+			}
+		}
+
+		$parameters .= "I\n2\nY\n";
+
+		if(defined $weight && $weight =~ /^[0-9]+(,[0-9]+)*$/) {
 			$parameters .= "W\n";
 			$parameters .= "Y\n";
 			
@@ -113,59 +198,22 @@
 				}
 			}
 		}
-		#print $parameters;
-		#exit;
-		open MATRIZDNA, ">".$tempDir."/parameters"
-			  or die "ERROR: Unable open file: $tempDir/parameters.\n$!\n";
-		print MATRIZDNA $parameters;
-		close MATRIZDNA;
+
+	#	if(defined $weight && $weight eq "y") {
+	#		$parameters .= "W\n";
+	#	}
+	#	
+	#	if($modelValue != 3 && defined $gamma && $gamma eq "y") {
+	#		$parameters .= "G\n";
+	#		if($gamma eq "gi") {
+	#			$parameters .= "G\n";
+	#		}
+	#	}
 		
 		
-		(system("$pwd/Exe/dnadist < $tempDir/parameters > $tempDir/dnadistlog") == 0
-			and move("outfile","$tempDir/matrix"))
-			or &$_dying;
-	};
-	
-	my $_executeProtDist = sub {
-        my $instance = $_[1];
-        
-        my $pwd = $instance->parameter("PWD");
-	    my $model = $instance->parameter("MODEL");
-	    my $tempDir = $instance->parameter("TEMP");
-	    my $fileIn = $instance->parameter("INPUT");
-	    my $gamma = $instance->parameter("GAMMA");
-	    my $weight = $instance->parameter("WEIGHT");
-	    my $parameters = $fileIn."\n";
-        
-	    my $modelValue = 0;
-		if($model =~ /^pm/) {
-			$modelValue = 1;
-		}
-		elsif($model =~ /^pa/) {
-			$modelValue = 2;
-		}
-		elsif($model =~ /^k/) {
-			$modelValue = 3;
-		}
-		for my $i (1..$modelValue) {
-			$parameters .= "P\n";
-		}
 		
-		if(defined $weight && $weight eq "y") {
-			$parameters .= "W\n";
-		}
-		
-		if($modelValue != 3 && defined $gamma && $gamma eq "y") {
-			$parameters .= "G\n";
-			if($gamma eq "gi") {
-				$parameters .= "G\n";
-			}
-		}
-		
-		$parameters .= "I\n2\nY\n";
-		
-		#print $parameters;
-		#exit;
+		print $parameters;
+		exit;
 
 		open MATRIZPROT, ">".$tempDir."/parameters"
 			   or die "ERROR: Unable open file: $tempDir/parameters.\n$!\n";
