@@ -47,6 +47,16 @@
         
         my $parameters = $fileIn."\n";
         
+	# Verificação de parâmetros
+	if(defined $alpha && $alpha <= 0){
+		print "Argumento invalido: ALPHA deve ser positivo\n";
+		exit;
+	}
+	if(defined $fraction && ($fraction <= 0 || $fraction >= 1)){
+		print "Argumento invalido: ISITE deve ser um numero entre 0 e 1\n";
+		exit;
+	}
+
         my $modelValue = 0;
 		if($model =~ /^k/) {
 			$modelValue = 1;
