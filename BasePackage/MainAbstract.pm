@@ -46,16 +46,6 @@
 		my $fraction = $instance->parameter("ISITE");
         
         my $parameters = $fileIn."\n";
-        
-	# Verificação de parâmetros
-	if(defined $alpha && $alpha <= 0){
-		print "Argumento invalido: ALPHA deve ser positivo\n";
-		exit;
-	}
-	if(defined $fraction && ($fraction <= 0 || $fraction >= 1)){
-		print "Argumento invalido: ISITE deve ser um numero entre 0 e 1\n";
-		exit;
-	}
 
         my $modelValue = 0;
 		if($model =~ /^k/) {
@@ -149,7 +139,7 @@
 	    my $alpha = $instance->parameter("ALPHA");
 	    my $fraction = $instance->parameter("ISITE");
 	    my $parameters = $fileIn."\n";
-        
+
 	    my $modelValue = 0;
 		if($model =~ /^pm/) {
 			$modelValue = 1;

@@ -55,14 +55,36 @@
     
    	sub configure {
    		my $self = shift;
-    	while(@_){
-    		my $indice = shift;
-    		$self->{$indice} = shift; 
-    	}
-		
+
+	    	while(@_){
+	    		my $indice = shift;
+	    		$self->{$indice} = shift; 
+	    	}
+
+		# Tratamento de GAMMA
+		if(defined $self->{"ALPHA"}){
+			if($self->{"ALPHA"} <= 0){
+				print "Argumento invalido: ALPHA deve ser positivo\n";
+				exit;
+			}
+			if(defined $self->{"ISITE"}){
+				if($self->{"ISITE"} <= 0 || $self->{"ISITE"} >= 1){
+					print "Argumento invalido: ISITE deve ser um numero entre 0 e 1\n";
+					exit;
+				}
+				$self->{"GAMMA"} = 2;
+			}
+			else{ $self->{"GAMMA"} = 1 }
+		}
+		elsif(defined $self->{"ISITE"}){
+			print "Input error: ISITE so pode ser usado se ALPHA for definido\n";
+			exit;
+		}
+		else{ $self->{"GAMMA"} = 0 }
+
 		# configura parametros default para parametros não setados ou incorretos
-		$self->{"GAMMA"} = (!defined $self->{"ALPHA"})? 0 : #opcao "n"
-			   ((defined $self->{"ISITE"}) ? 2 : 1);    	#opcao "gi" ou "y"
+	#	$self->{"GAMMA"} = (!defined $self->{"ALPHA"})? 0 : #opcao "n"
+	#		   ((defined $self->{"ISITE"}) ? 2 : 1);    	#opcao "gi" ou "y"
 		my $type = $self->{"TYPE"};
        	$self->{"TYPE"}	 = "dna" if(!defined $type or
         						($type ne "dna"   and
