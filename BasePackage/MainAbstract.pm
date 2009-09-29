@@ -71,8 +71,20 @@
 			$parameters .= "D\n";
 		}
 		
-		if(defined $ratio && ($modelValue == 0 || $modelValue == 1)){
-			$parameters .= "T\n$ratio\n"; 
+		if(defined $ratio){
+			if($modelValue == 0 || $modelValue == 1){
+				if($ratio >= 0){
+					$parameters .= "T\n$ratio\n";
+				}
+				else{
+					print "Argumento invalido: RATIO deve ser maior ou igual a 0\n";
+					exit;
+				}
+			}
+			else{
+				print "Input error: RATIO nao e usado no modelo escolhido\n";
+				exit;
+			}
 		}
 		
 		if($modelValue != 3) {
