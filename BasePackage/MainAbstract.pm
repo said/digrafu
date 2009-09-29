@@ -60,6 +60,7 @@
 			}
 			elsif($model =~ /^l/) {
 				$modelValue = 3;
+				$gamma = 0;
 			}
 			else{
 				print "Argumento invalido: modelo inexistente\n";
@@ -96,7 +97,7 @@
 					$parameters .= "$fraction\n";
 				}
 			}
-			print "blz";
+			
 			$parameters .= "$tempDir/weights\n";
 
 			my @sites = split /,/,$weight;
@@ -169,6 +170,8 @@
 				exit;
 			}
 		}
+		else{ $gamma = 0 }
+
 		for my $i (1..$modelValue) {
 			$parameters .= "P\n";
 		}

@@ -60,6 +60,7 @@
 			}
 			elsif($model =~ /^l/) {
 				$modelValue = 3;
+				$gamma = 0;
 			}
 			else{
 				print "Argumento invalido: modelo inexistente\n";
@@ -96,7 +97,7 @@
 					$parameters .= "$fraction\n";
 				}
 			}
-			print "blz";
+			
 			$parameters .= "$tempDir/weights\n";
 
 			my @sites = split /,/,$weight;
@@ -155,14 +156,14 @@
 
 		# Caso o usuário tenha definido um modelo, verifica o modelo escolhido 
 		if( defined $model && !($model =~ /^k/) ){
-			if($model =~ /^pm/) {
+			if($model =~ /^jt/) {
+				$modelValue = 0;
+			}			
+			elsif($model =~ /^pm/) {
 				$modelValue = 1;
 			}
 			elsif($model =~ /^pa/) {
 				$modelValue = 2;
-			}
-			elsif($model =~ /^jt/) {
-				$modelValue = 0;
 			}
 			else{
 				print "Argumento invalido: modelo inexistente\n";
