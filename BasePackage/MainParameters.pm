@@ -94,7 +94,7 @@
         								($preference ne "a"  and
         					 			 $preference ne "ta" and
         					 			 $preference ne "t"));
-		defined $self->{"MODEL"} or $self->{"MODEL"} = "kimura";
+	#	defined $self->{"MODEL"} or $self->{"MODEL"} = "kimura";
 		defined $self->{"INPUT"} or die "ERRO: Esqueceu de passar o arquivo de entrada.\n";
         defined $self->{"OUTPUT"} or die "ERRO: Esqueceu de passar o arquivo de saida.\n";
         	

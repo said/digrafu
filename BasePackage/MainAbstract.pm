@@ -33,29 +33,38 @@
 	my $_executeDNADist = sub  {
 		
 		my $instance = $_[1];
-        my $pwd = $instance->parameter("PWD");
-        my $model = $instance->parameter("MODEL");
-        my $tempDir = $instance->parameter("TEMP");
-        my $fileIn = $instance->parameter("INPUT");
-       	my $weight = $instance->parameter("WEIGHT");
-        my $letters = $instance->parameter("LETTER");
-        my $ratio = $instance->parameter("RATIO");
-        my $gamma = $instance->parameter("GAMMA");
-        my $freque = $instance->parameter("FREQUE");
+		my $pwd = $instance->parameter("PWD");
+		my $model = $instance->parameter("MODEL");
+		my $tempDir = $instance->parameter("TEMP");
+		my $fileIn = $instance->parameter("INPUT");
+	       	my $weight = $instance->parameter("WEIGHT");
+		my $letters = $instance->parameter("LETTER");
+		my $ratio = $instance->parameter("RATIO");
+		my $gamma = $instance->parameter("GAMMA");
+		my $freque = $instance->parameter("FREQUE");
 		my $alpha = $instance->parameter("ALPHA");
 		my $fraction = $instance->parameter("ISITE");
         
-        my $parameters = $fileIn."\n";
+		my $parameters = $fileIn."\n";
 
-        my $modelValue = 0;
-		if($model =~ /^k/) {
-			$modelValue = 1;
-		}
-		elsif($model =~ /^j/) {
-			$modelValue = 2;
-		}
-		elsif($model =~ /^l/) {
-			$modelValue = 3;
+		# Seta modelo kimura como padrão
+		my $modelValue = 1;
+
+		# Caso o usuário tenha definido um modelo, verifica o modelo escolhido 
+		if( defined $model && !($model =~ /^k/) ){
+			if($model =~ /^f/) {
+				$modelValue = 0;
+			}
+			elsif($model =~ /^j/) {
+				$modelValue = 2;
+			}
+			elsif($model =~ /^l/) {
+				$modelValue = 3;
+			}
+			else{
+				print "Argumento invalido: modelo inexistente\n";
+				exit;
+			}
 		}
 		for my $i (1..$modelValue) {
 			$parameters .= "D\n";
@@ -127,28 +136,38 @@
 	};
 	
 	my $_executeProtDist = sub {
-        my $instance = $_[1];
-        
-        my $pwd = $instance->parameter("PWD");
-	    my $model = $instance->parameter("MODEL");
-	    my $tempDir = $instance->parameter("TEMP");
-	    my $fileIn = $instance->parameter("INPUT");
-	    my $gamma = $instance->parameter("GAMMA");
-	    my $weight = $instance->parameter("WEIGHT");
-            my $letters = $instance->parameter("LETTER");
-	    my $alpha = $instance->parameter("ALPHA");
-	    my $fraction = $instance->parameter("ISITE");
-	    my $parameters = $fileIn."\n";
 
-	    my $modelValue = 0;
-		if($model =~ /^pm/) {
-			$modelValue = 1;
-		}
-		elsif($model =~ /^pa/) {
-			$modelValue = 2;
-		}
-		elsif($model =~ /^k/) {
-			$modelValue = 3;
+		my $instance = $_[1];
+
+		my $pwd = $instance->parameter("PWD");
+		my $model = $instance->parameter("MODEL");
+		my $tempDir = $instance->parameter("TEMP");
+		my $fileIn = $instance->parameter("INPUT");
+		my $gamma = $instance->parameter("GAMMA");
+		my $weight = $instance->parameter("WEIGHT");
+		my $letters = $instance->parameter("LETTER");
+		my $alpha = $instance->parameter("ALPHA");
+		my $fraction = $instance->parameter("ISITE");
+		my $parameters = $fileIn."\n";
+
+		# Seta modelo kimura como padrão
+		my $modelValue = 3;
+
+		# Caso o usuário tenha definido um modelo, verifica o modelo escolhido 
+		if( defined $model && !($model =~ /^k/) ){
+			if($model =~ /^jt/) {
+				$modelValue = 0;
+			}			
+			elsif($model =~ /^pm/) {
+				$modelValue = 1;
+			}
+			elsif($model =~ /^pa/) {
+				$modelValue = 2;
+			}
+			else{
+				print "Argumento invalido: modelo inexistente\n";
+				exit;
+			}
 		}
 		for my $i (1..$modelValue) {
 			$parameters .= "P\n";
@@ -160,7 +179,7 @@
 			}
 		}
 
-		$parameters .= "I\n2\nY\n";
+		$parameters .= "I\n2\n";
 
 		if(defined $weight && $weight =~ /^[0-9]+(,[0-9]+)*$/) {
 			$parameters .= "W\n";
