@@ -44,13 +44,14 @@
 		my $freque = $instance->parameter("FREQUE");
 		my $alpha = $instance->parameter("ALPHA");
 		my $fraction = $instance->parameter("ISITE");
+		my $categories = $instance->parameter("CATEGORIES");
         
 		my $parameters = $fileIn."\n";
 
 		# Seta modelo kimura como padrão
 		my $modelValue = 1;
 
-		# Caso o usuário tenha definido um modelo, verifica o modelo escolhido 
+		# Verificação do modelo escolhido 
 		if( defined $model && !($model =~ /^k/) ){
 			if($model =~ /^f/) {
 				$modelValue = 0;
@@ -61,6 +62,7 @@
 			elsif($model =~ /^l/) {
 				$modelValue = 3;
 				$gamma = 0;
+				$categories = undef;
 			}
 			else{
 				print "Argumento invalido: modelo inexistente\n";
@@ -71,6 +73,25 @@
 			$parameters .= "D\n";
 		}
 		
+		if(defined $categories){
+			# Avalia se o argumento passado para CATEGORIES é válido e faz o tratamento adequado
+			if($categories =~ /^(-?[0-9]*\.?[0-9]+)(,(-?[0-9]*\.?[0-9]+))*$/){
+				my @cat = split /,/,$categories;
+				if((@cat >= 1) && (@cat <= 9)){
+					$parameters .= "C\n".scalar(@cat)."\n@cat\n";
+				}
+				else{
+					print "Argumento invalido: o numero de categorias deve estar entre 1 e 9\n";
+					exit;
+				}
+			}
+			else{
+				print "Argumento invalido: CATEGORIES deve ser uma sequencia de um a nove numeros ".
+				      "inteiros ou reais separados por virgula e sem espacos\n";
+				exit;
+			}
+		}
+
 		if(defined $ratio){
 			if($modelValue == 0 || $modelValue == 1){
 				if($ratio >= 0){
@@ -82,7 +103,7 @@
 				}
 			}
 			else{
-				print "Input error: RATIO nao e usado para o modelo escolhido\n";
+				print "Input error: RATIO nao e usado no modelo escolhido\n";
 				exit;
 			}
 		}
@@ -161,6 +182,7 @@
 		my $letters = $instance->parameter("LETTER");
 		my $alpha = $instance->parameter("ALPHA");
 		my $fraction = $instance->parameter("ISITE");
+		my $categories = $instance->parameter("CATEGORIES");
 		my $parameters = $fileIn."\n";
 
 		# Seta modelo kimura como padrão

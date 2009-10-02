@@ -13,28 +13,34 @@
 	##################################################
     
 	my $_new = sub {
+
         	my $self  = {};
-        	$self->{"TYPE"} 		= undef;
-        	$self->{"INPUT"} 		= undef;
-        	$self->{"QSPEC"}		= undef;
-			$self->{"ALPHA"}		= undef;
-			$self->{"GAMMA"}		= undef;
-        	$self->{"FREQUE"}		= undef;
-        	$self->{"OUTPUT"} 		= undef;
+
+        	$self->{"TYPE"} 	= undef;
+        	$self->{"INPUT"} 	= undef;
+        	$self->{"QSPEC"}	= undef;
+		$self->{"ALPHA"}	= undef;
+		$self->{"GAMMA"}	= undef;
+        	$self->{"FREQUE"}	= undef;
+        	$self->{"OUTPUT"} 	= undef;
         	$self->{"PREFERENCE"}	= undef;
         	$self->{"LDIFFERENCE"}	= undef;
         	$self->{"ADDICTIVITY"}	= undef;
         	$self->{"SEQUENTIAL"}	= undef;
-        	$self->{"LETTER"}		= undef;
-        	$self->{"WEIGHT"} 		= undef;
-        	$self->{"RATIO"} 		= undef;
-        	$self->{"ISITE"}		= undef;	# fraction
-        	$self->{"MODEL"}		= undef;
-        	$self->{"NAMES"}		= undef;
-			$self->{"TEMP"}			= undef;
-			$self->{"PWD"}			= undef;
-			bless($self);
-			return $self;
+        	$self->{"LETTER"}	= undef;
+        	$self->{"WEIGHT"} 	= undef;
+        	$self->{"RATIO"} 	= undef;
+        	$self->{"ISITE"}	= undef;# fraction
+        	$self->{"MODEL"}	= undef;
+        	$self->{"NAMES"}	= undef;
+		$self->{"TEMP"}		= undef;
+		$self->{"PWD"}		= undef;
+		$self->{"CATEGORIES"}	= undef;
+
+		bless($self);
+
+		return $self;
+
 	};
     
 	##################################################
@@ -63,6 +69,14 @@
 
 		# Tratamento de GAMMA
 		if(defined $self->{"ALPHA"}){
+
+			# A opção gamma desabilita a opção categorias
+			if(defined $self->{"CATEGORIES"}){
+				print "Input error: a opcao gamma desabilita a opcao de categorias\n";
+				exit;
+			}
+
+			# Faz o reconhecimento dos argumentos de ALPHA e ISITE (se possuir)
 			if($self->{"ALPHA"} <= 0){
 				print "Argumento invalido: ALPHA deve ser positivo\n";
 				exit;
