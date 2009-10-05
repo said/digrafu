@@ -76,7 +76,9 @@
 		if(defined $categories){
 			# Avalia se o argumento passado para CATEGORIES é válido e faz o tratamento adequado
 			if($categories =~ /^(-?[0-9]*\.?[0-9]+)(,(-?[0-9]*\.?[0-9]+))*$/){
+
 				my @cat = split /,/,$categories;
+
 				if((@cat >= 1) && (@cat <= 9)){
 					$parameters .= "C\n".scalar(@cat)."\n@cat\n";
 				}
@@ -219,7 +221,9 @@
 		if(defined $categories){
 			# Avalia se o argumento passado para CATEGORIES é válido e faz o tratamento adequado
 			if($categories =~ /^(-?[0-9]*\.?[0-9]+)(,(-?[0-9]*\.?[0-9]+))*$/){
+
 				my @cat = split /,/,$categories;
+
 				if((@cat >= 1) && (@cat <= 9)){
 					$parameters .= "C\n".scalar(@cat)."\n@cat\n";
 				}
