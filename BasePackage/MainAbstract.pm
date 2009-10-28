@@ -89,7 +89,7 @@
 			}
 			else{
 				print "Argumento invalido: CATEGORIES deve ser uma sequencia de um a nove numeros ".
-				      "inteiros ou reais separados por virgula e sem espacos\n";
+				      "reais separados por virgula e sem espacos\n";
 				exit;
 			}
 		}

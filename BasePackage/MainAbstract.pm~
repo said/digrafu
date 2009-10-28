@@ -30,7 +30,7 @@
 		die "";
 	};
 	
-	my $_executeDNADist = sub  {#die "MORREU!";
+	my $_executeDNADist = sub  {
 		
 		my $instance = $_[1];
 		my $pwd = $instance->parameter("PWD");
