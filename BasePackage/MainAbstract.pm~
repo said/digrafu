@@ -89,7 +89,7 @@
 			}
 			else{
 				print "Argumento invalido: CATEGORIES deve ser uma sequencia de um a nove numeros ".
-				      "inteiros ou reais separados por virgula e sem espacos\n";
+				      "reais separados por virgula e sem espacos\n";
 				exit;
 			}
 		}
@@ -158,8 +158,8 @@
 				}
 			}
 		}
-		print $parameters;
-		exit;
+		# print $parameters;
+		# exit;
 		open MATRIZDNA, ">".$tempDir."/parameters"
 			  or die "ERROR: Unable open file: $tempDir/parameters.\n$!\n";
 		print MATRIZDNA $parameters;
@@ -291,8 +291,8 @@
 		
 		
 		
-		print $parameters;
-		exit;
+		# print $parameters;
+		# exit;
 
 		open MATRIZPROT, ">".$tempDir."/parameters"
 			   or die "ERROR: Unable open file: $tempDir/parameters.\n$!\n";

@@ -158,8 +158,8 @@
 				}
 			}
 		}
-		print $parameters;
-		exit;
+		# print $parameters;
+		# exit;
 		open MATRIZDNA, ">".$tempDir."/parameters"
 			  or die "ERROR: Unable open file: $tempDir/parameters.\n$!\n";
 		print MATRIZDNA $parameters;
@@ -291,8 +291,8 @@
 		
 		
 		
-		print $parameters;
-		exit;
+		# print $parameters;
+		# exit;
 
 		open MATRIZPROT, ">".$tempDir."/parameters"
 			   or die "ERROR: Unable open file: $tempDir/parameters.\n$!\n";
