@@ -92,6 +92,7 @@
 				      "reais separados por virgula e sem espacos\n";
 				exit;
 			}
+
 		}
 
 		if(defined $ratio){
@@ -120,19 +121,38 @@
 			$parameters .= "F\n".join(" ",@_)."\n";
 		}
 		
-		$parameters .= "I\n2\n";
-		
-		if(defined $weight && $weight =~ /^[0-9]+(,[0-9]+)*$/) {
-			$parameters .= "W\n";
-			$parameters .= "Y\n";
-			
-			if($gamma > 0){
-				$parameters .= "$alpha\n";
-				if($gamma > 1){
-					$parameters .= "$fraction\n";
-				}
+
+		if(defined $weight){
+			if($weight =~ /^[0-9]+(,[0-9]+)*$/){
+
+				$parameters .= "W\n";
+	
 			}
-			
+			else{
+				print "Argumento invalido: WEIGHT deve ser uma sequencia de numeros ".
+				      "inteiros separados por virgula e sem espacos\n";
+				exit;
+			}
+		}
+
+		$parameters .= "I\n2\nY\n";
+
+		# Parametros passados apos a confirmacao
+		if($gamma > 0){
+			$parameters .= "$alpha\n";
+			if($gamma > 1){
+				$parameters .= "$fraction\n";
+			}
+		}
+
+		if(defined $categories){
+
+			$parameters .= "$pwd/Aux/categories"
+
+		}
+
+		if(defined $weight){
+
 			$parameters .= "$tempDir/weights\n";
 
 			my @sites = split /,/,$weight;
@@ -148,16 +168,7 @@
 			print WEIGHTS join "",@weights;
 			close WEIGHTS;
 		}
-		else{
-			$parameters .= "Y\n";
-			
-			if($gamma > 0){
-				$parameters .= "$alpha\n";
-				if($gamma > 1){
-					$parameters .= "$fraction\n";
-				}
-			}
-		}
+
 		# print $parameters;
 		# exit;
 		open MATRIZDNA, ">".$tempDir."/parameters"
@@ -212,12 +223,6 @@
 			$parameters .= "P\n";
 		}
 		
-		if($modelValue != 3) {
-			for my $i(1..$gamma){
-				$parameters .= "G\n";
-			}
-		}
-
 		if(defined $categories){
 			# Avalia se o argumento passado para CATEGORIES é válido e faz o tratamento adequado
 			if($categories =~ /^(-?[0-9]*\.?[0-9]+)(,(-?[0-9]*\.?[0-9]+))*$/){
@@ -237,21 +242,46 @@
 				      "inteiros ou reais separados por virgula e sem espacos\n";
 				exit;
 			}
+
 		}
 
-		$parameters .= "I\n2\n";
-
-		if(defined $weight && $weight =~ /^[0-9]+(,[0-9]+)*$/) {
-			$parameters .= "W\n";
-			$parameters .= "Y\n";
-			
-			if($gamma > 0){
-				$parameters .= "$alpha\n";
-				if($gamma > 1){
-					$parameters .= "$fraction\n";
-				}
+		if($modelValue != 3) {
+			for my $i(1..$gamma){
+				$parameters .= "G\n";
 			}
-			
+		}
+
+		if(defined $weight){
+			if($weight =~ /^[0-9]+(,[0-9]+)*$/){
+
+				$parameters .= "W\n";
+	
+			}
+			else{
+				print "Argumento invalido: WEIGHT deve ser uma sequencia de numeros ".
+				      "inteiros separados por virgula e sem espacos\n";
+				exit;
+			}
+		}
+
+		$parameters .= "I\n2\nY\n";
+
+		# Parametros passados apos a confirmacao
+		if($gamma > 0){
+			$parameters .= "$alpha\n";
+			if($gamma > 1){
+				$parameters .= "$fraction\n";
+			}
+		}
+
+		if(defined $categories){
+
+			$parameters .= "$pwd/Aux/categories"
+
+		}
+
+		if(defined $weight){
+
 			$parameters .= "$tempDir/weights\n";
 
 			my @sites = split /,/,$weight;
@@ -267,16 +297,8 @@
 			print WEIGHTS join "",@weights;
 			close WEIGHTS;
 		}
-		else{
-			$parameters .= "Y\n";
-			
-			if($gamma > 0){
-				$parameters .= "$alpha\n";
-				if($gamma > 1){
-					$parameters .= "$fraction\n";
-				}
-			}
-		}
+
+	# Uso antigo #
 
 	#	if(defined $weight && $weight eq "y") {
 	#		$parameters .= "W\n";
