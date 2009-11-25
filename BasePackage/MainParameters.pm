@@ -19,7 +19,7 @@
         	$self->{"TYPE"} 	= undef;
         	$self->{"INPUT"} 	= undef;
         	$self->{"QSPEC"}	= undef;
-		$self->{"ALPHA"}	= undef;
+		$self->{"CV"}	= undef;
 		$self->{"GAMMA"}	= undef;
         	$self->{"FREQUE"}	= undef;
         	$self->{"OUTPUT"} 	= undef;
@@ -68,7 +68,7 @@
 	    	}
 
 		# Tratamento de GAMMA
-		if(defined $self->{"ALPHA"}){
+		if(defined $self->{"CV"}){
 
 			# A opção gamma desabilita a opção categorias
 			if(defined $self->{"CATEGORIES"}){
@@ -76,9 +76,9 @@
 				exit;
 			}
 
-			# Faz o reconhecimento dos argumentos de ALPHA e ISITE (se possuir)
-			if($self->{"ALPHA"} <= 0){
-				print "Argumento invalido: ALPHA deve ser positivo\n";
+			# Faz o reconhecimento dos argumentos de CV e ISITE (se possuir)
+			if($self->{"CV"} <= 0){
+				print "Argumento invalido: CV deve ser positivo\n";
 				exit;
 			}
 			if(defined $self->{"ISITE"}){
@@ -91,13 +91,13 @@
 			else{ $self->{"GAMMA"} = 1 }
 		}
 		elsif(defined $self->{"ISITE"}){
-			print "Input error: ISITE so pode ser usado se ALPHA for definido\n";
+			print "Input error: ISITE so pode ser usado se CV for definido\n";
 			exit;
 		}
 		else{ $self->{"GAMMA"} = 0 }
 
 		# configura parametros default para parametros não setados ou incorretos
-	#	$self->{"GAMMA"} = (!defined $self->{"ALPHA"})? 0 : #opcao "n"
+	#	$self->{"GAMMA"} = (!defined $self->{"CV"})? 0 : #opcao "n"
 	#		   ((defined $self->{"ISITE"}) ? 2 : 1);    	#opcao "gi" ou "y"
 		my $type = $self->{"TYPE"};
        	$self->{"TYPE"}	 = "dna" if(!defined $type or
@@ -113,7 +113,7 @@
         defined $self->{"OUTPUT"} or die "ERRO: Esqueceu de passar o arquivo de saida.\n";
 
         # Demais Parametros:
-        # $self->{"ALPHA"}	 	 = MainAbstract trata default;
+        # $self->{"CV"}	 	 = MainAbstract trata default;
         # $self->{"ISITE"}	 	 = MainAbstract trata default;
 	    # $self->{"QSPEC"}	 	 = setado por Converter;
 	    # $self->{"LDIFFERENCE"} = usado somente por Main;

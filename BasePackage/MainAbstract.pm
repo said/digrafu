@@ -42,7 +42,7 @@
 		my $ratio = $instance->parameter("RATIO");
 		my $gamma = $instance->parameter("GAMMA");
 		my $freque = $instance->parameter("FREQUE");
-		my $alpha = $instance->parameter("ALPHA");
+		my $cv = $instance->parameter("CV");
 		my $fraction = $instance->parameter("ISITE");
 		my $categories = $instance->parameter("CATEGORIES");
         
@@ -139,7 +139,7 @@
 
 		# Parametros passados apos a confirmacao
 		if($gamma > 0){
-			$parameters .= "$alpha\n";
+			$parameters .= "$cv\n";
 			if($gamma > 1){
 				$parameters .= "$fraction\n";
 			}
@@ -193,7 +193,7 @@
 		my $gamma = $instance->parameter("GAMMA");
 		my $weight = $instance->parameter("WEIGHT");
 		my $letters = $instance->parameter("LETTER");
-		my $alpha = $instance->parameter("ALPHA");
+		my $cv = $instance->parameter("CV");
 		my $fraction = $instance->parameter("ISITE");
 		my $categories = $instance->parameter("CATEGORIES");
 		my $parameters = $fileIn."\n";
@@ -268,7 +268,7 @@
 
 		# Parametros passados apos a confirmacao
 		if($gamma > 0){
-			$parameters .= "$alpha\n";
+			$parameters .= "$cv\n";
 			if($gamma > 1){
 				$parameters .= "$fraction\n";
 			}
