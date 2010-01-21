@@ -1,0 +1,24 @@
+
+- PHYML v2.4.5 -
+
+. Sequence file : [/home/gilmar/workspace/digrafu/Sequencias/reais_prot/m2637.seq]
+
+. Model of amino acids substitution : JTT
+
+. Initial tree : [BIONJ]
+
+. Number of taxa : 19
+
+
+. Likelihood : loglk = -1601.88937
+
+. Discrete gamma model : Yes
+  - Number of categories : 4
+  - Gamma shape parameter : 0.195
+
+. Proportion of invariant : 0.299
+
+. Time used 0h0m12s
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
