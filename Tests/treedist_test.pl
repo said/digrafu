@@ -1,6 +1,4 @@
-#!/usr/bin/perl
-
-use warnings;
+#!/usr/bin/perl -w
 
 @seqnumbers = ("2304", "2636", "2637", "2638", "2639", "2640", "2641");
 
