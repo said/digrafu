@@ -72,27 +72,23 @@
 
 			# A opção gamma desabilita a opção categorias
 			if(defined $self->{"CATEGORIES"}){
-				print "Input error: a opcao gamma desabilita a opcao de categorias\n";
-				exit;
+				die "Input error: a opcao gamma desabilita a opcao de categorias\n";
 			}
 
 			# Faz o reconhecimento dos argumentos de CV e ISITE (se possuir)
 			if($self->{"CV"} <= 0){
-				print "Argumento invalido: CV deve ser positivo\n";
-				exit;
+				die "Argumento invalido: CV deve ser positivo\n";
 			}
 			if(defined $self->{"ISITE"}){
 				if($self->{"ISITE"} <= 0 || $self->{"ISITE"} >= 1){
-					print "Argumento invalido: ISITE deve ser um numero entre 0 e 1\n";
-					exit;
+					die "Argumento invalido: ISITE deve ser um numero entre 0 e 1\n";
 				}
 				$self->{"GAMMA"} = 2;
 			}
 			else{ $self->{"GAMMA"} = 1 }
 		}
 		elsif(defined $self->{"ISITE"}){
-			print "Input error: ISITE so pode ser usado se CV for definido\n";
-			exit;
+			die "Input error: ISITE so pode ser usado se CV for definido\n";
 		}
 		else{ $self->{"GAMMA"} = 0 }
 

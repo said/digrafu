@@ -65,8 +65,7 @@
 				$categories = undef;
 			}
 			else{
-				print "Argumento invalido: modelo inexistente\n";
-				exit;
+				die "Argumento invalido: modelo inexistente\n";
 			}
 		}
 		for my $i (1..$modelValue) {
@@ -83,14 +82,12 @@
 					$parameters .= "C\n".scalar(@cat)."\n@cat\n";
 				}
 				else{
-					print "Argumento invalido: o numero de categorias deve estar entre 1 e 9\n";
-					exit;
+					die "Argumento invalido: o numero de categorias deve estar entre 1 e 9\n";
 				}
 			}
 			else{
-				print "Argumento invalido: CATEGORIES deve ser uma sequencia de um a nove numeros ".
+				die "Argumento invalido: CATEGORIES deve ser uma sequencia de um a nove numeros ".
 				      "reais separados por virgula e sem espacos\n";
-				exit;
 			}
 
 		}
@@ -101,13 +98,11 @@
 					$parameters .= "T\n$ratio\n";
 				}
 				else{
-					print "Argumento invalido: RATIO deve ser maior ou igual a 0\n";
-					exit;
+					die "Argumento invalido: RATIO deve ser maior ou igual a 0\n";
 				}
 			}
 			else{
-				print "Input error: RATIO nao e usado no modelo escolhido\n";
-				exit;
+				die "Input error: RATIO nao e usado no modelo escolhido\n";
 			}
 		}
 		
@@ -129,9 +124,8 @@
 	
 			}
 			else{
-				print "Argumento invalido: WEIGHT deve ser uma sequencia de numeros ".
+				die "Argumento invalido: WEIGHT deve ser uma sequencia de numeros ".
 				      "inteiros separados por virgula e sem espacos\n";
-				exit;
 			}
 		}
 
@@ -213,8 +207,7 @@
 				$modelValue = 2;
 			}
 			else{
-				print "Argumento invalido: modelo inexistente\n";
-				exit;
+				die "Argumento invalido: modelo inexistente\n";
 			}
 		}
 		else{ $gamma = 0 }
@@ -233,14 +226,12 @@
 					$parameters .= "C\n".scalar(@cat)."\n@cat\n";
 				}
 				else{
-					print "Argumento invalido: o numero de categorias deve estar entre 1 e 9\n";
-					exit;
+					die "Argumento invalido: o numero de categorias deve estar entre 1 e 9\n";
 				}
 			}
 			else{
-				print "Argumento invalido: CATEGORIES deve ser uma sequencia de um a nove numeros ".
+				die "Argumento invalido: CATEGORIES deve ser uma sequencia de um a nove numeros ".
 				      "inteiros ou reais separados por virgula e sem espacos\n";
-				exit;
 			}
 
 		}
@@ -258,9 +249,8 @@
 	
 			}
 			else{
-				print "Argumento invalido: WEIGHT deve ser uma sequencia de numeros ".
+				die "Argumento invalido: WEIGHT deve ser uma sequencia de numeros ".
 				      "inteiros separados por virgula e sem espacos\n";
-				exit;
 			}
 		}
 

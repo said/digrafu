@@ -37,6 +37,8 @@
 		open MAIN, "$pwd/Main.pl";
 		eval <MAIN>;
 		close MAIN;
+
+		print $@ if $@;
 		
 		unlink </tmp/.distancia.grafu/*>;
 		rmdir "$temp";
