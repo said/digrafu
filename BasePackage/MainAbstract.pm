@@ -21,13 +21,14 @@
 	## private methods								##
 	
 	my $_dying = sub {
-		my $instance = $_[1];
+		my $instance = $_[0];
+		my $program = $_[1];
 		my $tempDir = $instance->parameter("TEMP");
 		unlink <./outfile>;
-		print "DNADIST ERROR:\n";
-		system "cat $tempDir/dnadistlog | grep WARNING";
-		system "cat $tempDir/dnadistlog | grep ERROR";
-		die "";
+		print uc($program)." ERROR:\n";
+		system "cat $tempDir/$program"."log | grep WARNING";
+		system "cat $tempDir/$program"."log | grep ERROR";
+		die "\n";
 	};
 	
 	my $_executeDNADist = sub  {
@@ -165,6 +166,7 @@
 
 		# print $parameters;
 		# exit;
+
 		open MATRIZDNA, ">".$tempDir."/parameters"
 			  or die "ERROR: Unable open file: $tempDir/parameters.\n$!\n";
 		print MATRIZDNA $parameters;
@@ -173,7 +175,8 @@
 		
 		(system("$pwd/Exe/dnadist < $tempDir/parameters > $tempDir/dnadistlog") == 0
 			and move("outfile","$tempDir/matrix"))
-			or &$_dying;
+			or &$_dying($instance, "dnadist");
+
 	};
 	
 	my $_executeProtDist = sub {
@@ -307,12 +310,14 @@
 		# exit;
 
 		open MATRIZPROT, ">".$tempDir."/parameters"
-			   or die "ERROR: Unable open file: $tempDir/parameters.\n$!\n";
+			  or die "ERROR: Unable open file: $tempDir/parameters.\n$!\n";
 		print MATRIZPROT $parameters;
 		close MATRIZPROT;
 		
-		system "$pwd/Exe/protdist < $tempDir/parameters > $tempDir/protdistlog";
-		move "./outfile", "$tempDir/matrix";
+		(system("$pwd/Exe/protdist < $tempDir/parameters > $tempDir/protdistlog") == 0
+			and move("outfile","$tempDir/matrix"))
+			or &$_dying($instance, "protdist");
+
 	};
 	
 	## captures parameters and chooses the ma-	##

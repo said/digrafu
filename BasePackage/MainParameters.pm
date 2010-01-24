@@ -19,7 +19,7 @@
         	$self->{"TYPE"} 	= undef;
         	$self->{"INPUT"} 	= undef;
         	$self->{"QSPEC"}	= undef;
-		$self->{"CV"}	= undef;
+		$self->{"CV"}		= undef;
 		$self->{"GAMMA"}	= undef;
         	$self->{"FREQUE"}	= undef;
         	$self->{"OUTPUT"} 	= undef;
