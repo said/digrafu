@@ -40,7 +40,7 @@ foreach $model (@prot_model){
 
 }
 
-print "Teste completado!\n";
+print "Teste completado!\nVer relatório de erros: error_report.txt\n";
 
 close REPORT;
 
@@ -52,11 +52,14 @@ sub execute_digrafu{
 	my $execution_string = shift;
 	my $param = shift;
 
-	unless(open RUN, $execution_string." |"){
+	open RUN, $execution_string." |";
 
-		local $/;
-		my $execution_output = <RUN>;
-		report_error("$param\n\n".$execution_string."\n\n$execution_output");
+	local $/;
+	my $execution_output = <RUN>;
+
+	if($execution_output){
+
+		report_error("$param\n\n"."$execution_string\n\n".$execution_output);
 
 	}
 
