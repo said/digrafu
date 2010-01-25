@@ -2,12 +2,18 @@
 
 use strict;
 
-my $testInput = "../Sequencias/reais_dna/m520.seq";
+my @dna_seqnumbers = ("62", "520", "535", "536", "795", "925", "926");
+
+my @prot_seqnumbers = ("2304", "2636", "2637", "2638", "2639", "2640", "2641");
+
+my @preference = ("a", "t", "ta");
 
 my @dna_model = ("kimura", "f84", "jc", "logdet");
 my @prot_model = ("kimura", "pmb", "pam", "jtt");
 
+my $seqnum = undef;
 my $model = undef;
+my $pref = undef;
 
 open REPORT, ">error_report.txt";
 
@@ -20,23 +26,41 @@ open REPORT, ">error_report.txt";
 print "Testando DiGrafu - DNA\n";
 print REPORT "Erros - DNA\n";
 
-# teste models
-foreach $model (@dna_model){
+foreach $seqnum (@dna_seqnumbers){
 
-	execute_digrafu("../Run.pl INPUT $testInput OUTPUT testOutput MODEL $model TYPE dna", "MODEL");
+	# preference
+
+	foreach $pref (@preference){
+
+		# teste models
+		foreach $model (@dna_model){
+
+			execute_digrafu("../Run.pl INPUT ../Sequencias/reais_dna/m$seqnum.seq OUTPUT testOutput PREFERENCE $pref MODEL $model TYPE dna", $seqnum);
+
+		}
+
+	}
 
 }
 
-$testInput = "../Sequencias/reais_prot/m2304.seq";
-
 # prot
-print "Testando DiGrafu - Proteína\n\n";
-print REPORT "Erros - Proteína\n\n";
+print "Testando DiGrafu - Proteína\n";
+print REPORT "Erros - Proteína\n";
 
-# teste models
-foreach $model (@prot_model){
+foreach $seqnum (@prot_seqnumbers){
 
-	execute_digrafu("../Run.pl INPUT $testInput OUTPUT testOutput MODEL $model TYPE prot", "MODEL");
+	# preference
+
+	foreach $pref (@preference){
+
+		# teste models
+		foreach $model (@prot_model){
+
+			execute_digrafu("../Run.pl INPUT ../Sequencias/reais_prot/m$seqnum.seq OUTPUT testOutput PREFERENCE $pref MODEL $model TYPE prot", $seqnum);
+
+		}
+
+	}
 
 }
 
@@ -50,7 +74,7 @@ close REPORT;
 sub execute_digrafu{
 
 	my $execution_string = shift;
-	my $param = shift;
+	my $seq = shift;
 
 	open RUN, $execution_string." |";
 
@@ -59,7 +83,7 @@ sub execute_digrafu{
 
 	if($execution_output){
 
-		report_error("$param\n\n"."$execution_string\n\n".$execution_output);
+		report_error("$seq\n\n"."$execution_string\n\n".$execution_output);
 
 	}
 
