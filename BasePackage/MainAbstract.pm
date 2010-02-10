@@ -113,8 +113,19 @@
 			}
 		}
 		
-		if($modelValue == 0 && defined $freque && (@_ = split /,/,$freque) == 4){
-			$parameters .= "F\n".join(" ",@_)."\n";
+		if(defined $freque and ($modelValue == 0)){
+
+			if( (@_ = split /,/,$freque) == 4 ){
+				$parameters .= "F\n".join(" ",@_)."\n";
+			}
+			else{
+				die "Argumento invalido: FREQUE deve ser uma sequência de quatro numeros ".
+				    "reais separados por virgula\n";
+			}
+
+		}
+		else{
+			die "Input error: FREQUE nao e usado no modelo escolhido\n";
 		}
 		
 
