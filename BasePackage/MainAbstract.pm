@@ -115,7 +115,7 @@
 		
 		if(defined $freque){
 
-			if($modelValue == 0)){
+			if($modelValue == 0){
 
 				if( (@_ = split /,/,$freque) == 4 ){
 					$parameters .= "F\n".join(" ",@_)."\n";
