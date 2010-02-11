@@ -38,7 +38,12 @@ Main:
 		     );
 		$pvalues{"1"} = ["a", "t", "ta"];
 		$pvalues{"2"} = ["kimura", "f84", "jc", "logdet"];
-		$pvalues{"3"} = [];
+
+		my @cv = undef;
+		foreach my $i (1..100){
+			$cv[$i-1] = $i/10;
+		}
+		$pvalues{"3"} = \@cv;
 		$pvalues{"4"} = [];
 		$pvalues{"5"} = [];
 		$pvalues{"6"} = [];
