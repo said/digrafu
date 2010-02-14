@@ -70,11 +70,6 @@
 		# Tratamento de GAMMA
 		if(defined $self->{"CV"}){
 
-			# A opção gamma desabilita a opção categorias
-			if(defined $self->{"CATEGORIES"}){
-				die "Input error: a opcao gamma desabilita a opcao de categorias\n";
-			}
-
 			# Faz o reconhecimento dos argumentos de CV e ISITE (se possuir)
 			if($self->{"CV"} <= 0){
 				die "Argumento invalido: CV deve ser positivo\n";
