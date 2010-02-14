@@ -3,15 +3,13 @@
 use strict;
 
 
+my @dna_sequences =  ("m2898.seq"); # split /\n/, `ls ../Sequencias/reais_dna`;
+my @prot_sequences = ("m2636.seq"); # split /\n/, `ls ../Sequencias/reais_prot`;
 my %params;
 my %pvalues;
-# my %dna_params = undef;
-# my %dna_pvalues = undef;
-# my %prot_params = undef;
-# my %prot_pvalues = undef;
-my @dna_sequences =  split /\n/, `ls ../Sequencias/reais_dna`;
-my @prot_sequences = split /\n/, `ls ../Sequencias/reais_prot`;
-
+my @cv;
+my @isite;
+my @ratio;
 my $seq = undef;
 
 open REPORT, ">error_report.txt";
@@ -22,68 +20,38 @@ Main:
 	my $type = $ARGV[0];			# Tipo de sequência
 	my @p_list = split //, $ARGV[2];	# Lista com os parâmetros a serem analizados
 
-	# Teste de DNA
-	if($type =~ /^-d/){
+	ajusta_parametros();			# Inicializa os hashes com os parâmetros comuns aos dois tipos de sequência
 
-		# Inicializa os hashes de parâmetros
-		%params = (
-			"1" => "PREFERENCE",
-			"2" => "MODEL",
-			"3" => "CV",
-			"4" => "ISITE",
-			"5" => "WEIGHT",
-			"6" => "CATEGORIES",
-			"7" => "RATIO",
-			"8" => "FREQUE"
-		     );
-		$pvalues{"1"} = ["a", "t", "ta"];
-		$pvalues{"2"} = ["kimura", "f84", "jc", "logdet"];
-
-		my @cv = undef;
-		foreach my $i (1..100){
-			$cv[$i-1] = $i/10;
-		}
-		$pvalues{"3"} = \@cv;
-		$pvalues{"4"} = [];
-		$pvalues{"5"} = [];
-		$pvalues{"6"} = [];
-		$pvalues{"7"} = [];
-		$pvalues{"8"} = [];
-		
-		print "Testando DiGrafu - DNA\n";
-		print REPORT "Erros - DNA\n";
-
-		# Testa o DiGrafu para todas as sequências de dna encontradas 
-		foreach $seq (@dna_sequences){
-			teste_recursivo("../Run.pl INPUT ../Sequencias/reais_dna/$seq OUTPUT testOutput", @p_list);
-		}
-
-	}
 	# Teste de proteínas
-	if($type =~ /p$/){
-
-		# Inicializa os hashes de parâmetros
-		%params = (
-			"1" => "PREFERENCE",
-			"2" => "MODEL",
-			"3" => "CV",
-			"4" => "ISITE",
-			"5" => "WEIGHT",
-			"6" => "CATEGORIES"
-		     );
-		$pvalues{"1"} = ["a", "t", "ta"];
-		$pvalues{"2"} = ["kimura", "pmb", "pam", "jtt"];
-		$pvalues{"3"} = [];
-		$pvalues{"4"} = [];
-		$pvalues{"5"} = [];
-		$pvalues{"6"} = [];
- 		
+	if($type =~ /^-p/){
 		print "Testando DiGrafu - Proteína\n";
 		print REPORT "Erros - Proteína\n";
 
+		# Improviso para não passar para sequências de proteína
+		# parâmetros somente válidos para sequências de dna
+		my @p_list_prot;
+		foreach my $i (@p_list){
+			push (@p_list_prot, $i) if ($i <= 6);
+		}
+
+		# Inicializa os hashes com os parâmetros de proteína
+		ajusta_parametrosPROT();
 		# Testa o DiGrafu para todas as sequências de proteína encontradas 
 		foreach $seq (@prot_sequences){
-			teste_recursivo("../Run.pl INPUT ../Sequencias/reais_prot/$seq OUTPUT testOutput", @p_list);
+			teste_recursivo("../Run.pl INPUT ../Sequencias/reais_prot/$seq OUTPUT testOutput TYPE prot", @p_list_prot);
+		}
+
+	}
+	# Teste de DNA
+	if($type =~ /d$/){
+		print "Testando DiGrafu - DNA\n";
+		print REPORT "Erros - DNA\n";
+
+		# Inicializa os hashes com os parâmetros de dna
+		ajusta_parametrosDNA();
+		# Testa o DiGrafu para todas as sequências de dna encontradas 
+		foreach $seq (@dna_sequences){
+			teste_recursivo("../Run.pl INPUT ../Sequencias/reais_dna/$seq OUTPUT testOutput TYPE dna", @p_list);
 		}
 
 	}
@@ -96,12 +64,81 @@ Main:
 
 #End Main
 
-print "Teste completado!\nVer relatório de erros: error_report.txt\n";
+print "Teste completado!\n".
+      "Ver relatório de erros: error_report.txt\n";
 
 close REPORT;
 
 exit(0);
 
+
+#################################################################################
+## Ajusta os parâmetros comuns aos dois tipos de sequência (dna e proteína)    ##
+#################################################################################
+sub ajusta_parametros{
+
+	%params = (
+		"1" => "PREFERENCE",
+		"2" => "MODEL",
+		"3" => "CV",
+		"4" => "ISITE",
+		"5" => "WEIGHT",	#Not implemented
+		"6" => "CATEGORIES"	#Not implemented
+	     );
+
+	# PREFERENCE
+	$pvalues{"1"} = ["a", "t", "ta"];
+
+	# CV
+	foreach my $i (1..10){
+		$cv[$i-1] = $i/10;
+	}
+	$pvalues{"3"} = \@cv;
+
+	# ISITE
+	foreach my $i (1..99){
+		$isite[$i-1] = $i/10;
+	}
+	$pvalues{"4"} = \@isite;
+
+	# WEIGHT
+	$pvalues{"5"} = [];
+
+	# CATEGORIES
+	$pvalues{"6"} = [];
+
+}
+
+#################################################################################
+## Ajusta os parâmetros específicos de proteína				       ##
+#################################################################################
+sub ajusta_parametrosPROT{
+	# MODEL
+	$pvalues{"2"} = ["kimura", "pmb", "pam", "jtt"];
+}
+
+#################################################################################
+## Ajusta os arâmetros específicos de dna				       ##
+#################################################################################
+sub ajusta_parametrosDNA{
+
+	$params{"7"} = "RATIO";
+	$params{"8"} = "FREQUE";	#Not implemented
+
+	# MODEL
+	$pvalues{"2"} = ["kimura", "f84", "jc", "logdet"];
+
+	# RATIO
+	@ratio = undef;
+	foreach my $i (0..100){
+		$ratio[$i-1] = $i/10;
+	}
+	$pvalues{"7"} = \@ratio;
+
+	# FREQUE
+	$pvalues{"8"} = [];
+
+}
 
 #################################################################################
 ## Aplica as várias combinações aos prâmetros e os combina recursivamente      ##
@@ -168,14 +205,14 @@ sub report_error{
 sub print_help{
 
 	print "Usage: digrafu_execution_test.pl <type> <options> <params_list> \n";
-	print "Types: -d - DNA\n";
-	print "	      -p - Protein\n";
-	print "	      -pd - DNA and protein\n";
+	print "Types: -p  -  Protein\n";
+	print "	      -d  -  DNA-\n";
+	print "	      -pd -  Protein and DNA\n";
 	print "\n";
-	print "Options: -a - Test all parameters\n";				# Not implemented
-	print "	        -c - Combine parameters\n";
-	print "	        -ac - Test all parameters an combine parameters\n";	# Not implemented
-	print "         -h - Print this message and quit\n";
+	print "Options: -a  -  Test all parameters\n";				# Not implemented
+	print "	        -c  -  Combine parameters\n";
+	print "	        -ac -  Test all parameters an combine parameters\n";	# Not implemented
+	print "         -h  -  Print this message and quit\n";
 	print "\n";
 	print "         List of parameters:\n";
 	print "           1  -  PREFERENCE\n";
