@@ -136,7 +136,7 @@
 		
 		# quebra o arquivo de sequencias em linhas
 		$_ = shift;
-		s/\n[\t ]+/ /g;
+		s/\n[\t ]+/\n/g;
 		@_ = split /\n+/, $_;
 		
 		my $info = shift;
