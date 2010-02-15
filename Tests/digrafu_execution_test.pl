@@ -2,21 +2,26 @@
 
 use strict;
 
-
+# Sequências
 my @dna_sequences =  ("m2898.seq"); # split /\n/, `ls ../Sequencias/reais_dna`;
 my @prot_sequences = ("m2636.seq"); # split /\n/, `ls ../Sequencias/reais_prot`;
+
+# Hashes que mapeiam os parâmetros de entrada com os parâmetros do DiGrafu
 my %params;
 my %pvalues;
+
+# Arrays auxiliares que armazenarão os valores possíveis de cada parâmetro
 my @cv;
 my @isite;
 my @ratio;
+my @freque;
+
 my $seq = undef;
 
 open REPORT, ">error_report.txt";
 
 Main:
 
-	# Inicialização de variáveis
 	my $type = $ARGV[0];			# Tipo de sequência
 	my @p_list = split //, $ARGV[2];	# Lista com os parâmetros a serem analizados
 
@@ -123,20 +128,28 @@ sub ajusta_parametrosPROT{
 sub ajusta_parametrosDNA{
 
 	$params{"7"} = "RATIO";
-	$params{"8"} = "FREQUE";	#Not implemented
+	$params{"8"} = "FREQUE";
 
 	# MODEL
 	$pvalues{"2"} = ["kimura", "f84", "jc", "logdet"];
 
 	# RATIO
-	@ratio = undef;
-	foreach my $i (0..100){
-		$ratio[$i-1] = $i/10;
+	foreach my $i (0..10){
+		push @ratio, $i/10;
 	}
 	$pvalues{"7"} = \@ratio;
 
 	# FREQUE
-	$pvalues{"8"} = [];
+	foreach my $a (0..4){
+		foreach my $c (0..4){
+			foreach my $g (0..4){
+				foreach my $t (0..4){
+					push @freque, (($a/4).",".($c/4).",".($g/4).",".($t/4));
+				}
+			}
+		}
+	}
+	$pvalues{"8"} = \@freque;
 
 }
 
