@@ -5,7 +5,27 @@ use strict;
 my $option = $ARGV[0];
 my $w = "(.+?)";
 
-if($option == 1){
+if(option == "1a"){
+
+	open BRANCHES, "validação2/galhos" or die "falha ao abrir arquivo de galhos\n";
+	open AVG, ">medias" or die "falha ao abrir arquivo de médias";
+
+	my $line = <BRANCHES>;
+	$line =~ /^$w $w $w $w$/;
+	my $digrafuavg = $4/$3;
+
+	$line = <BRANCHES>;
+	$line =~ /^$w $w $w $w$/;
+	my $phymlavg = $4/$3;
+
+	my $finalavg = ($phymlavg+$digrafuavg)/2.0;
+	print AVG "Media =>"." $finalavg\n";
+
+	close BRANCHES;
+	close AVG;
+
+}
+elsif($option == "1b"){
 
 	open GPHYML, "galhos_phyml-treeutils.txt" or die "falha ao abrir arquivo galhos_phyml-treeutils.txt\n";
 	open GDIGRAFU, "galhos_digrafu-treeutils.txt" or die "falha ao abrir arquivo galhos_digrafu-treeutils.txt\n";
@@ -38,7 +58,28 @@ if($option == 1){
 	close OUT;
 
 }
-elsif($option == 2){
+elsif($option == "2a"){
+
+	open AVG, "medias" or die "erro ao abrir arquivo de medias\n";
+
+	my @results = (0, 0, 0);
+	my $Q = 17;
+	my $maxvalue;
+	my $line = <AVG>;
+	$line =~ /^$w $w $w$/;
+
+	# topologica		
+	$maxvalue = 2*$Q;
+
+	foreach my $r (@results){
+		my $final_value = ($maxvalue-$r)/$maxvalue;
+		print "$final_valuen\n";
+	}
+
+	close AVG;
+
+}
+elsif($option == "2"){
 
 	my @results = (12, 12, 12, 4, 4, 8, 6, 6, 8, 6, 6, 2, 8, 8, 6, 0, 0, 0, 6, 4, 4);
 	my @branch_results = (0.36, 0.36, 0.36, 0.47, 0.47, 0.48, 0.01, 0.01, 0.02, 0.02,
