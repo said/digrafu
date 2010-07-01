@@ -6,7 +6,7 @@ use strict;
 # (obs: caminhos relativos a pasta digrafu/Test, onde deve estar localizado este arquivo)
 my $dna_dir = "sequencias/dna";
 my $prot_dir = "sequencias/prot";
-my $out_dir = "validacao3";
+my $out_dir = "validacao4";
 my $tree_dir = "trees";
 my $phyml_dir = "PhyML_3.0";
 
@@ -255,6 +255,8 @@ sub padroniza_valores{
 	my @max_qt_br;
 	my $maxvalue;
 	my $result;
+	my $result_p;
+	my $result_v;
 	my $line2;
 
 	open TAB, ">$out_dir/$tabela" or die "erro ao abrir arquivo de resultados finais\n";
@@ -278,12 +280,14 @@ sub padroniza_valores{
 					$seqdir = $dna_dir;
 					$type = "dna";
 				}
-				else{
+			}
+			foreach my $sequence (@prot_sequences){
+				if($seq eq $sequence){
 					$seqdir = $prot_dir;
 					$type = "proteina";
 				}
 			}
-			open SEQ, "$seqdir/$seq" or die "erro ao abrir arquivo de sequência\n";
+			open SEQ, "$seqdir/$seq" or die "erro ao abrir arquivo de sequência $?\n";
 
 			my $info = <SEQ>;
 			$info =~ /(\d+)\s+(\d+)/;
@@ -301,8 +305,11 @@ sub padroniza_valores{
 				$line =~ /\s(\S+)$/;
 				$result = $1;
 				$maxvalue = 2*$qt;
+				$result_p = ($maxvalue-$result)/$maxvalue;
+				$result  =~ s/\./,/g;
+				$result_p  =~ s/\./,/g;
 
-				print TAB ( "$result\t".(($maxvalue-$result)/$maxvalue)."\t" );
+				print TAB ( "$result\t$result_p\t" );
 
 
 			}
@@ -312,13 +319,22 @@ sub padroniza_valores{
 			# Galhos
 			$line2 = <BSD>;
 			$line2 =~ /.+\s(\S+)$/;
-			$result = $1+0;
+			$result_v = $1+0;
+			$result = $result_v;
+			$result  =~ s/\./,/g;
+
 			$maxvalue = 2*$qt*$media_a;
-			print TAB ( "$result\t".(($maxvalue-$result)/$maxvalue)."\t" );
+			$result_p = ($maxvalue-$result_v)/$maxvalue;
+			$result_p  =~ s/\./,/g;
+			print TAB ( "$result\t$result_p\t" );
 			$maxvalue = 2*$qt*$media_ta;
-			print TAB ( "$result\t".(($maxvalue-$result)/$maxvalue)."\t" );
+			$result_p = ($maxvalue-$result_v)/$maxvalue;
+			$result_p  =~ s/\./,/g;
+			print TAB ( "$result\t$result_p\t" );
 			$maxvalue = 2*$qt*$media_t;
-			print TAB ( "$result\t".(($maxvalue-$result)/$maxvalue)."\n" );
+			$result_p = ($maxvalue-$result_v)/$maxvalue;
+			$result_p  =~ s/\./,/g;
+			print TAB ( "$result\t$result_p\n" );
 
 			close BSD;
 
