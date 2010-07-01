@@ -134,11 +134,19 @@
     my $_interleavedToSequential  = sub {
     	my $instance = Parameters::getInstance;
 		
-		# quebra o arquivo de sequencias em linhas
 		$_ = shift;
-		s/\n[\t ]+/\n/g;
-		@_ = split /\n+/, $_;
 		
+		# Verifica se o arquivo nao eh do tipo sequencial com quebras de linhas
+		# e faz um tratamento diferenciado se for o caso
+		if(/^\s*\d+\s+\d+\n\s*\S+.*\n\S/){
+		    s/\n[\t ]+/\n/g;
+		}
+		else{
+		    s/\n[\t ]+/ /g;
+		}
+		# quebra o arquivo de sequencias em linhas
+		@_ = split /\n+/, $_;
+
 		my $info = shift;
 		$info =~ /\s*(\d+)\s+(\d+)/;
 		my $species = $1;
