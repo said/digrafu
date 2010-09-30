@@ -33,21 +33,32 @@
 	
 	my $_executeDNADist = sub  {
 		
-		my $instance = $_[1];
-		my $pwd = $instance->parameter("PWD");
-		my $model = $instance->parameter("MODEL");
-		my $tempDir = $instance->parameter("TEMP");
-		my $fileIn = $instance->parameter("INPUT");
-	       	my $weight = $instance->parameter("WEIGHT");
-		my $letters = $instance->parameter("LETTER");
-		my $ratio = $instance->parameter("RATIO");
-		my $gamma = $instance->parameter("GAMMA");
-		my $freque = $instance->parameter("FREQUE");
-		my $cv = $instance->parameter("CV");
-		my $fraction = $instance->parameter("ISITE");
-		my $categories = $instance->parameter("CATEGORIES");
+        my $instance = $_[1];
+        my $pwd = $instance->parameter("PWD");
+        my $model = $instance->parameter("MODEL");
+        my $tempDir = $instance->parameter("TEMP");
+        my $fileIn = $instance->parameter("INPUT");
+        my $weight = $instance->parameter("WEIGHT");
+        my $letters = $instance->parameter("LETTER");
+        my $ratio = $instance->parameter("RATIO");
+        my $gamma = $instance->parameter("GAMMA");
+        my $freque = $instance->parameter("FREQUE");
+        my $cv = $instance->parameter("CV");
+        my $fraction = $instance->parameter("ISITE");
+        my $categories = $instance->parameter("CATEGORIES");
+        
+        # Para evitar problemas na montagem do arquivo "parameters" em relacao
+        # aos arquivos de entrada e saida do dnadist:
+        # 1. Não deve haver um arquivo de nome "infile" no diretorio atual
+        # 2. Deve haver um arquivo de nome "outfile" no diretorio atual
+	    system("rm infile");
+	    system("touch outfile");
         
 		my $parameters = $fileIn."\n";
+		$parameters .= "f\n";
+		$parameters .= "$fileIn.out\n";# obs: pode apresentar risco para
+		                               # execucoes paralelas do digrafu com
+		                               # arquivos de entrada de mesmo nome
 
 		# Seta modelo kimura como padrão
 		my $modelValue = 1;
@@ -187,10 +198,10 @@
 		print MATRIZDNA $parameters;
 		close MATRIZDNA;
 		
-		
 		(system("$pwd/Exe/dnadist < $tempDir/parameters > $tempDir/dnadistlog") == 0
-			and move("outfile","$tempDir/matrix"))
+			and move("$fileIn.out","$tempDir/matrix"))
 			or &$_dying($instance, "dnadist");
+
 
 	};
 	
@@ -208,8 +219,20 @@
 		my $cv = $instance->parameter("CV");
 		my $fraction = $instance->parameter("ISITE");
 		my $categories = $instance->parameter("CATEGORIES");
+        
+        # Para evitar problemas na montagem do arquivo "parameters" em relacao
+        # aos arquivos de entrada e saida do protdist:
+        # 1. Não deve haver um arquivo de nome "infile" no diretorio atual
+        # 2. Deve haver um arquivo de nome "outfile" no diretorio atual
+	    system("rm infile");
+	    system("touch outfile");
+        
 		my $parameters = $fileIn."\n";
-
+		$parameters .= "f\n";
+		$parameters .= "$fileIn.out\n";# obs: pode apresentar risco para
+		                               # execucoes paralelas do digrafu com
+		                               # arquivos de entrada de mesmo nome
+		                               
 		# Seta modelo kimura como padrão
 		my $modelValue = 3;
 
@@ -330,7 +353,7 @@
 		close MATRIZPROT;
 		
 		(system("$pwd/Exe/protdist < $tempDir/parameters > $tempDir/protdistlog") == 0
-			and move("outfile","$tempDir/matrix"))
+			and move("$fileIn.out","$tempDir/matrix"))
 			or &$_dying($instance, "protdist");
 
 	};
